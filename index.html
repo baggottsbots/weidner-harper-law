@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+
+<!-- SEO Meta Tags -->
+<title>Weidner &amp; Harper, LLC | Veteran-Owned Law Firm in Beaufort, SC</title>
+<meta name="description" content="Modern, professional website for Weidner &amp; Harper, LLC — a veteran-owned Beaufort, South Carolina law firm serving family law, criminal defense, real estate, probate, injuries, aviation law, and military law." />
+<meta property="og:title" content="Weidner &amp; Harper, LLC | Veteran-Owned Law Firm in Beaufort, SC" />
+<meta property="og:description" content="Modern, professional website for Weidner &amp; Harper, LLC — a veteran-owned Beaufort, South Carolina law firm serving family law, criminal defense, real estate, probate, injuries, aviation law, and military law." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Weidner &amp; Harper, LLC | Veteran-Owned Law Firm in Beaufort, SC" />
+<meta name="twitter:description" content="Modern, professional website for Weidner &amp; Harper, LLC — a veteran-owned Beaufort, South Carolina law firm serving family law, criminal defense, real estate, probate, injuries, aviation law, and military law." />
+<!-- End SEO Meta Tags -->
+
+<script data-field-replace>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var fields={};
+  var paramMap={
+    'first_name':'firstName','last_name':'lastName','full_name':'fullName',
+    'email':'email','phone':'phone','company':'company',
+    'city':'city','state':'state','country':'country'
+  };
+  var skipTags={'SCRIPT':1,'STYLE':1,'NOSCRIPT':1,'TEXTAREA':1,'CODE':1,'PRE':1};
+  var hasUrlFields=false;
+  for(var p in paramMap){
+    var v=params.get(p);
+    if(v){fields[paramMap[p]]=v;hasUrlFields=true;}
+  }
+  var contactId=params.get('contact_id');
+  function esc(s){
+    if(!s)return s;
+    var d=document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+  function doReplace(data){
+    var r={};
+    r['{{full_name}}']=esc(((data.firstName||'')+' '+(data.lastName||'')).trim()||((data.fullName||data.name)||''));
+    r['{{first_name}}']=esc(data.firstName||(data.name?data.name.split(' ')[0]:'')||'');
+    r['{{last_name}}']=esc(data.lastName||(data.name&&data.name.indexOf(' ')>-1?data.name.substring(data.name.indexOf(' ')+1):'')||'');
+    r['{{email}}']=esc(data.email||'');
+    r['{{phone}}']=esc(data.phone||'');
+    r['{{company}}']=esc(data.company||'');
+    r['{{city}}']=esc(data.city||'');
+    r['{{state}}']=esc(data.state||'');
+    r['{{country}}']=esc(data.country||'');
+    r['{{date}}']=new Date().toLocaleDateString();
+    r['{{time}}']=new Date().toLocaleTimeString();
+    r['{{location}}']=[data.city,data.state,data.country].filter(Boolean).join(', ');
+    r['{{tracking_id}}']=esc(data.trackingId||'');
+    r['{{lastClickedProduct}}']=esc(data.lastClickedProduct||'');
+    r['{{lastProductClickDate}}']=esc(data.lastProductClickDate||'');
+    r['{{lastClickedProductPrice}}']=esc(data.lastClickedProductPrice||'');
+    r['{{lastClickedProductURL}}']=esc(data.lastClickedProductURL||'');
+    r['{{productsClickedCount}}']=esc(data.productsClickedCount||'0');
+    r['{{ip_address}}']=esc(data.ipAddress||'');
+    r['{{ip}}']=esc(data.ipAddress||'');
+    if(data.customFields){
+      for(var k in data.customFields){
+        r['{{'+k+'}}']=esc(String(data.customFields[k]||''));
+      }
+    }
+    params.forEach(function(v,k){
+      if(!paramMap[k]&&k!=='contact_id'&&k!=='page_id'&&k.indexOf('utm_')!==0){
+        r['{{'+k+'}}']=esc(v);
+      }
+    });
+    var hasValues=false;
+    for(var key in r){if(r[key]){hasValues=true;break;}}
+    if(!hasValues)return;
+    var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode:function(n){
+        var p=n.parentNode;
+        if(p&&skipTags[p.nodeName])return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var node;
+    while(node=walker.nextNode()){
+      var txt=node.nodeValue;
+      if(txt&&txt.indexOf('{{')>-1){
+        var changed=txt;
+        for(var ph in r){
+          if(r[ph]&&changed.indexOf(ph)>-1){
+            changed=changed.split(ph).join(r[ph]);
+          }
+        }
+        if(changed!==txt)node.nodeValue=changed;
+      }
+    }
+    var attrs=['value','placeholder','content','alt','title'];
+    attrs.forEach(function(attr){
+      var els=document.querySelectorAll('['+attr+'*="{{"]');
+      for(var i=0;i<els.length;i++){
+        var tag=els[i].tagName;
+        if(skipTags[tag])continue;
+        var val=els[i].getAttribute(attr);
+        if(val){
+          var nv=val;
+          for(var ph in r){
+            if(r[ph]&&nv.indexOf(ph)>-1){
+              nv=nv.split(ph).join(r[ph]);
+            }
+          }
+          if(nv!==val)els[i].setAttribute(attr,nv);
+        }
+      }
+    });
+  }
+  function run(){
+    if(contactId){
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET','https://paymegpt.com/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=2701');
+      xhr.onload=function(){
+        if(xhr.status===200){
+          try{
+            var resp=JSON.parse(xhr.responseText);
+            if(resp.success&&resp.contact){
+              var merged=resp.contact;
+              for(var k in fields){merged[k]=fields[k];}
+              doReplace(merged);
+              return;
+            }
+          }catch(e){}
+        }
+        if(hasUrlFields)doReplace(fields);
+      };
+      xhr.onerror=function(){if(hasUrlFields)doReplace(fields);};
+      xhr.send();
+    }else if(hasUrlFields){
+      doReplace(fields);
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}
+  else{run();}
+})();
+</script>
+<script data-payment>
+(function(){
+  var slug='xkKWR9pr';
+  var apiBase='https://paymegpt.com';
+  function findEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  var __realProcessPayment=function(a,b,c,d,e){
+    var amountCents,email,productName,productDescription,customerName,quantity;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents;email=a.email;productName=a.productName;
+      productDescription=a.productDescription||'';customerName=a.name||'';quantity=a.quantity||1;
+    }else{
+      amountCents=typeof a==='number'?a:0;productName=typeof b==='string'?b:'';
+      productDescription=typeof c==='string'?c:'';email='';customerName='';quantity=1;
+    }
+    if(!email)email=findEmail();
+    if(!customerName)customerName=findName();
+    if(!productName){alert('Product name is required.');return Promise.reject('no_product_name');}
+    if(!amountCents||amountCents<100){alert('Amount must be at least $1.00');return Promise.reject('invalid_amount');}
+    if(!email){alert('Please enter your email address.');return Promise.reject('no_email');}
+    var successBase=window.location.href.split('?')[0];
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/payment/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:customerName,amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process payment');throw new Error(d.error);}
+    });
+  };
+  Object.defineProperty(window,'__processPayment',{value:__realProcessPayment,writable:false,configurable:false});
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('payment')==='success'){
+      var pName=urlParams.get('product')||'your item';
+      var overlay=document.createElement('div');overlay.id='payment-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">Thank you for purchasing '+pName.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'.</p><button onclick="document.getElementById(\'payment-success-overlay\').remove();window.history.replaceState({},\'\',window.location.pathname);" style="padding:12px 32px;font-size:16px;font-weight:600;background:#16a34a;color:white;border:none;border-radius:8px;cursor:pointer;">Continue</button></div>';
+      document.body.appendChild(overlay);
+    }
+  });
+})();
+</script></head>
+<body class="bg-slate-950 text-white antialiased">
+  <div class="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(197,160,40,.14),transparent_30%),radial-gradient(circle_at_top_right,rgba(45,74,34,.45),transparent_28%),linear-gradient(180deg,#0b1220_0%,#0d1724_45%,#071017_100%)]"></div>
+
+  <header class="sticky top-0 z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+      <div>
+        <p class="text-xs uppercase tracking-[0.35em] text-gold/90">Veteran-Owned • Beaufort, South Carolina</p>
+        <h1 class="text-lg font-semibold">Weidner & Harper, LLC</h1>
+      </div>
+      <nav class="hidden gap-8 text-sm text-slate-200 md:flex">
+        <a href="#practice" class="hover:text-gold">Practice Areas</a>
+        <a href="#about" class="hover:text-gold">About</a>
+        <a href="#attorneys" class="hover:text-gold">Attorneys</a>
+        <a href="#testimonials" class="hover:text-gold">Testimonials</a>
+        <a href="#contact" class="hover:text-gold">Contact</a>
+      </nav>
+      <a href="tel:18435210004" class="rounded-full bg-gold px-4 py-2 text-sm font-semibold text-slate-950 transition hover:scale-[1.02]">Call (843) 521-0004</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="relative overflow-hidden">
+      <div class="mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8 lg:py-28">
+        <div class="space-y-8">
+          <div class="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-white/5 px-4 py-2 text-sm text-slate-100">
+            <span class="h-2 w-2 rounded-full bg-gold"></span>
+            Founded in 1997 by two Marine veterans
+          </div>
+          <div class="space-y-5">
+            <h2 class="max-w-xl text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl">
+              Veterans Protecting Beaufort County —
+              <span class="text-gold">Honor. Courage. Integrity.</span>
+            </h2>
+            <p class="max-w-2xl text-lg leading-8 text-slate-300">
+              Weidner & Harper, LLC brings disciplined advocacy, deep Lowcountry roots, and a service-first mindset to family law, criminal defense, military law, real estate, probate, and injury claims.
+            </p>
+          </div>
+          <div class="flex flex-col gap-4 sm:flex-row">
+            <a href="tel:18435210004" class="rounded-full bg-gold px-6 py-3 text-center font-semibold text-slate-950 shadow-glow transition hover:-translate-y-0.5">Call Now: (843) 521-0004</a>
+            <a href="#contact" class="rounded-full border border-white/15 bg-white/5 px-6 py-3 text-center font-semibold text-white transition hover:border-gold/60 hover:text-gold">Request a Consultation</a>
+          </div>
+          <div class="grid grid-cols-2 gap-4 pt-4 sm:grid-cols-4">
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <p class="text-2xl font-bold text-gold">1997</p><p class="text-sm text-slate-300">Serving Beaufort</p>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <p class="text-2xl font-bold text-gold">2</p><p class="text-sm text-slate-300">Marine Founders</p>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <p class="text-2xl font-bold text-gold">7</p><p class="text-sm text-slate-300">Core Practice Areas</p>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <p class="text-2xl font-bold text-gold">24/7</p><p class="text-sm text-slate-300">Client Commitment</p>
+            </div>
+          </div>
+        </div>
+        <div class="relative">
+          <div class="absolute -inset-6 rounded-[2rem] bg-gold/10 blur-3xl"></div>
+          <div class="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-2xl">
+            <div class="grid gap-0 md:grid-cols-2">
+              <div class="bg-military p-8">
+                <p class="text-sm uppercase tracking-[0.35em] text-gold/90">Military-Rooted Advocacy</p>
+                <h3 class="mt-4 text-2xl font-bold">A firm built on service.</h3>
+                <p class="mt-4 text-slate-200">Discipline. Loyalty. Preparedness. We bring the Marine Corps ethos and Army leadership to every case.</p>
+              </div>
+              <div class="p-8">
+                <p class="text-sm uppercase tracking-[0.35em] text-gold">Beaufort, SC</p>
+                <div class="mt-4 space-y-4 text-sm text-slate-300">
+                  <p><span class="text-white">Address:</span> 6 Professional Village Circle, Beaufort, SC 29907</p>
+                  <p><span class="text-white">Phone:</span> (843) 521-0004</p>
+                  <p><span class="text-white">Focus:</span> Local families, service members, and Lowcountry businesses</p>
+                </div>
+                <div class="mt-8 rounded-2xl border border-gold/20 bg-slate-950/40 p-4">
+                  <p class="text-sm text-slate-300">“When your future is on the line, you deserve counsel that stands ready, calm, and combat-tested.”</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="practice" class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <div class="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-sm uppercase tracking-[0.35em] text-gold">Practice Areas</p>
+          <h3 class="mt-2 text-3xl font-bold">Focused representation for the cases that matter most.</h3>
+        </div>
+        <p class="max-w-2xl text-slate-300">From courtroom defense to careful planning, our team serves clients across Beaufort County with strength, clarity, and local insight.</p>
+      </div>
+      <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div class="group rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:-translate-y-1 hover:border-gold/40">
+          <div class="text-3xl">⚖️</div><h4 class="mt-4 text-xl font-semibold">Divorce & Family Law</h4><p class="mt-2 text-sm leading-6 text-slate-300">Protecting parental rights, assets, and stability through difficult transitions.</p>
+        </div>
+        <div class="group rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:-translate-y-1 hover:border-gold/40">
+          <div class="text-3xl">🛡️</div><h4 class="mt-4 text-xl font-semibold">Criminal Defense & DUI</h4><p class="mt-2 text-sm leading-6 text-slate-300">Strategic defense with disciplined preparation and direct communication.</p>
+        </div>
+        <div class="group rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:-translate-y-1 hover:border-gold/40">
+          <div class="text-3xl">🏠</div><h4 class="mt-4 text-xl font-semibold">Real Estate</h4><p class="mt-2 text-sm leading-6 text-slate-300">Closings, title issues, and property matters for Lowcountry clients.</p>
+        </div>
+        <div class="group rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:-translate-y-1 hover:border-gold/40">
+          <div class="text-3xl">📜</div><h4 class="mt-4 text-xl font-semibold">Probate & Estate Planning</h4><p class="mt-2 text-sm leading-6 text-slate-300">Wills, estate administration, and planning that preserves your legacy.</p>
+        </div>
+        <div class="group rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:-translate-y-1 hover:border-gold/40">
+          <div class="text-3xl">🚑</div><h4 class="mt-4 text-xl font-semibold">Accidents & Injuries</h4><p class="mt-2 text-sm leading-6 text-slate-300">Pursuing fair recovery after serious injury and unexpected loss.</p>
+        </div>
+        <div class="group rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:-translate-y-1 hover:border-gold/40">
+          <div class="text-3xl">✈️</div><h4 class="mt-4 text-xl font-semibold">Aviation Law & Military Law</h4><p class="mt-2 text-sm leading-6 text-slate-300">Experience with aviation matters, courts-martial, and service-related issues.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="border-y border-white/10 bg-white/5">
+      <div class="mx-auto grid max-w-7xl gap-10 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:px-8">
+        <div>
+          <p class="text-sm uppercase tracking-[0.35em] text-gold">About the Firm</p>
+          <h3 class="mt-2 text-3xl font-bold">Military values. Lowcountry roots. Since 1997.</h3>
+          <p class="mt-6 max-w-2xl text-slate-300 leading-8">
+            Weidner & Harper, LLC was founded by two Marine veterans who built a law firm around service, accountability, and respect. For nearly three decades, the firm has stood with Beaufort families, service members, and local businesses with practical advice and determined representation.
+          </p>
+          <p class="mt-4 max-w-2xl text-slate-300 leading-8">
+            Our approach reflects the values that shaped our founders: honor in every interaction, courage in the courtroom, and integrity in every result. We proudly serve a community that values tradition, family, and hard-earned trust.
+          </p>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div class="rounded-3xl border border-white/10 bg-slate-950/60 p-6">
+            <p class="text-gold">01</p><h4 class="mt-2 text-xl font-semibold">Veteran-Owned</h4><p class="mt-2 text-sm text-slate-300">Service-minded legal counsel from veterans who understand duty and discipline.</p>
+          </div>
+          <div class="rounded-3xl border border-white/10 bg-slate-950/60 p-6">
+            <p class="text-gold">02</p><h4 class="mt-2 text-xl font-semibold">Local Roots</h4><p class="mt-2 text-sm text-slate-300">Deep Beaufort County ties and a long-standing Lowcountry reputation.</p>
+          </div>
+          <div class="rounded-3xl border border-white/10 bg-slate-950/60 p-6">
+            <p class="text-gold">03</p><h4 class="mt-2 text-xl font-semibold">Courtroom Ready</h4><p class="mt-2 text-sm text-slate-300">Prepared for negotiation, litigation, and the pressures of contested cases.</p>
+          </div>
+          <div class="rounded-3xl border border-white/10 bg-slate-950/60 p-6">
+            <p class="text-gold">04</p><h4 class="mt-2 text-xl font-semibold">Client First</h4><p class="mt-2 text-sm text-slate-300">Clear communication and responsive guidance from first call to resolution.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="attorneys" class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <p class="text-sm uppercase tracking-[0.35em] text-gold">Attorneys</p>
+      <h3 class="mt-2 text-3xl font-bold">Experienced advocates with service in their blood.</h3>
+      <div class="mt-10 grid gap-6 lg:grid-cols-2">
+        <article class="rounded-3xl border border-white/10 bg-white/5 p-8">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h4 class="text-2xl font-bold">Larry W. Weidner II</h4>
+              <p class="mt-1 text-gold">Veteran Marine • Primary Litigator</p>
+            </div>
+            <div class="rounded-full border border-gold/30 bg-gold/10 px-3 py-1 text-xs uppercase tracking-[0.3em] text-gold">Marine</div>
+          </div>
+          <p class="mt-5 text-slate-300 leading-7">Larry leads on personal injury, family law, criminal defense, and military law matters. His courtroom style is direct, disciplined, and relentlessly prepared.</p>
+        </article>
+        <article class="rounded-3xl border border-white/10 bg-white/5 p-8">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h4 class="text-2xl font-bold">Frampton L. Harper II</h4>
+              <p class="mt-1 text-gold">Veteran Army Officer • Lowcountry Legacy</p>
+            </div>
+            <div class="rounded-full border border-gold/30 bg-gold/10 px-3 py-1 text-xs uppercase tracking-[0.3em] text-gold">Army</div>
+          </div>
+          <p class="mt-5 text-slate-300 leading-7">Frampton brings third-generation Beaufort knowledge to real estate, probate, estate administration, business law, and guardianship matters.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="testimonials" class="border-y border-white/10 bg-white/5">
+      <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <p class="text-sm uppercase tracking-[0.35em] text-gold">Testimonials</p>
+        <h3 class="mt-2 text-3xl font-bold">Trusted by clients who needed steady leadership.</h3>
+        <div class="mt-10 grid gap-6 lg:grid-cols-3">
+          <blockquote class="rounded-3xl border border-white/10 bg-slate-950/60 p-6">
+            <p class="text-slate-200">“Professional, calm, and aggressive when it mattered. They treated our family with respect and fought hard for us.”</p>
+            <footer class="mt-4 text-sm text-gold">— Family Law Client</footer>
+          </blockquote>
+          <blockquote class="rounded-3xl border border-white/10 bg-slate-950/60 p-6">
+            <p class="text-slate-200">“Their military background shows in the way they prepare. I always knew where my case stood.”</p>
+            <footer class="mt-4 text-sm text-gold">— Criminal Defense Client</footer>
+          </blockquote>
+          <blockquote class="rounded-3xl border border-white/10 bg-slate-950/60 p-6">
+            <p class="text-slate-200">“Weidner & Harper handled our estate matter with care, speed, and a deep understanding of local issues.”</p>
+            <footer class="mt-4 text-sm text-gold">— Probate Client</footer>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <div class="grid gap-10 lg:grid-cols-2">
+        <div>
+          <p class="text-sm uppercase tracking-[0.35em] text-gold">Contact</p>
+          <h3 class="mt-2 text-3xl font-bold">Speak with a veteran-owned law firm today.</h3>
+          <p class="mt-4 max-w-xl text-slate-300 leading-7">Call us for prompt guidance in Beaufort County and across the South Carolina Lowcountry.</p>
+          <div class="mt-8 space-y-4 rounded-3xl border border-white/10 bg-white/5 p-6">
+            <p><span class="text-gold">Address:</span> 6 Professional Village Circle, Beaufort, SC 29907</p>
+            <p><span class="text-gold">Phone:</span> <a href="tel:18435210004" class="hover:text-gold">(843) 521-0004</a></p>
+            <p><span class="text-gold">Office Identity:</span> Veteran-owned • Military-law capable • Locally rooted</p>
+          </div>
+        </div>
+        <form class="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-glow">
+          <div class="grid gap-4 sm:grid-cols-2">
+            <input class="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 outline-none ring-0 placeholder:text-slate-500 focus:border-gold" placeholder="First Name" />
+            <input class="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-gold" placeholder="Last Name" />
+            <input class="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-gold sm:col-span-2" placeholder="Email Address" />
+            <input class="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-gold sm:col-span-2" placeholder="Phone Number" />
+            <select class="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 outline-none text-slate-300 focus:border-gold sm:col-span-2">
+              <option>Practice Area</option><option>Divorce & Family Law</option><option>Criminal Defense & DUI</option><option>Real Estate</option><option>Probate & Estate Planning</option><option>Accidents & Injuries</option><option>Aviation Law</option><option>Military Law / Courts Martial</option>
+            </select>
+            <textarea class="min-h-32 rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-gold sm:col-span-2" placeholder="Tell us about your case"></textarea>
+          </div>
+          <button type="button" class="mt-4 w-full rounded-full bg-gold px-6 py-3 font-semibold text-slate-950 transition hover:scale-[1.01]">Request Consultation</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-white/10 bg-slate-950">
+    <div class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+      <p>© 2026 Weidner & Harper, LLC. All rights reserved.</p>
+      <p>6 Professional Village Circle, Beaufort, SC 29907 • (843) 521-0004</p>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
